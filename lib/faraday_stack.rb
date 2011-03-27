@@ -25,10 +25,10 @@ module FaradayStack
     Faraday::Connection.new(url, options) do |builder|
       builder.request :url_encoded
       builder.request :json
+      yield builder if block_given?
       builder.use ResponseJSON, :content_type => 'application/json'
       builder.use ResponseXML, :content_type => /[+\/]xml$/
       builder.response :raise_error
-      yield builder if block_given?
       builder.adapter Faraday.default_adapter
     end
   end
