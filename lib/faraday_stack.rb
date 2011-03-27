@@ -8,7 +8,8 @@ module FaradayStack
   autoload_all 'faraday_stack',
     :ResponseMiddleware => 'response_middleware',
     :ResponseJSON => 'response_json',
-    :ResponseXML => 'response_xml'
+    :ResponseXML => 'response_xml',
+    :ResponseHTML => 'response_html'
   
   # THE ÜBER STACK
   def self.default_connection
@@ -27,7 +28,8 @@ module FaradayStack
       builder.request :json
       yield builder if block_given?
       builder.use ResponseJSON, :content_type => 'application/json'
-      builder.use ResponseXML, :content_type => /[+\/]xml$/
+      builder.use ResponseXML,  :content_type => /[+\/]xml$/
+      builder.use ResponseHTML, :content_type => 'text/html'
       builder.response :raise_error
       builder.adapter Faraday.default_adapter
     end
