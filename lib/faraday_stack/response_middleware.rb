@@ -27,6 +27,7 @@ module FaradayStack
 
     def initialize(app = nil, options = {})
       super(app)
+      @options = options
       @content_types = Array(options[:content_type])
     end
 
