@@ -3,13 +3,6 @@ module FaradayStack
   class ResponseMiddleware < Faraday::Response::Middleware
     CONTENT_TYPE = 'Content-Type'.freeze
 
-    # Executes a block which should try to require and reference dependent libraries
-    def self.dependency
-      yield
-    rescue LoadError, NameError => error
-      self.load_error = error
-    end
-
     class << self
       attr_accessor :parser
     end
