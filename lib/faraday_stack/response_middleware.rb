@@ -32,7 +32,7 @@ module FaradayStack
 
     # Override this to modify the environment after the response has finished.
     def on_complete(env)
-      if process_response_type?(response_type(env))
+      if process_response_type?(response_type(env)) and parse_response?(env)
         env[:body] = parse(env[:body])
       end
     end
@@ -61,6 +61,10 @@ module FaradayStack
       @content_types.empty? or @content_types.any? { |pattern|
         Regexp === pattern ? type =~ pattern : type == pattern
       }
+    end
+    
+    def parse_response?(env)
+      env[:body].respond_to? :to_str
     end
   end
 end
