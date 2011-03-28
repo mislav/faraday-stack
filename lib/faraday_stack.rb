@@ -11,7 +11,8 @@ module FaradayStack
     :ResponseXML => 'response_xml',
     :ResponseHTML => 'response_html',
     :Instrumentation => 'instrumentation',
-    :Caching => 'caching'
+    :Caching => 'caching',
+    :FollowRedirects => 'follow_redirects'
   
   # THE ÜBER STACK
   def self.default_connection
@@ -32,6 +33,7 @@ module FaradayStack
       builder.use ResponseJSON, :content_type => 'application/json'
       builder.use ResponseXML,  :content_type => /[+\/]xml$/
       builder.use ResponseHTML, :content_type => 'text/html'
+      builder.use FollowRedirects
       builder.response :raise_error
       builder.adapter Faraday.default_adapter
     end
