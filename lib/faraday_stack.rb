@@ -9,7 +9,9 @@ module FaradayStack
     :ResponseMiddleware => 'response_middleware',
     :ResponseJSON => 'response_json',
     :ResponseXML => 'response_xml',
-    :ResponseHTML => 'response_html'
+    :ResponseHTML => 'response_html',
+    :Instrumentation => 'instrumentation',
+    :Caching => 'caching'
   
   # THE ÜBER STACK
   def self.default_connection
