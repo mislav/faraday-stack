@@ -12,7 +12,8 @@ module FaradayStack
     :ResponseHTML => 'response_html',
     :Instrumentation => 'instrumentation',
     :Caching => 'caching',
-    :FollowRedirects => 'follow_redirects'
+    :FollowRedirects => 'follow_redirects',
+    :RackCompatible => 'rack_compatible'
   
   # THE ÜBER STACK
   def self.default_connection
