@@ -2,9 +2,10 @@ module FaradayStack
   class Caching < Faraday::Middleware
     attr_reader :cache
     
-    def initialize(app, cache = nil)
+    def initialize(app, cache = nil, options = {})
       super(app)
       @cache = cache || Proc.new.call
+      @options = options
     end
     
     def call(env)
@@ -23,7 +24,19 @@ module FaradayStack
     end
     
     def cache_key(env)
-      env[:url].request_uri
+      url = env[:url]
+      if params_to_strip.any?
+        url = url.dup
+        url.query_values = url.query_values.reject { |k,| params_to_strip.include? k }
+        url.normalize!
+      else
+        url = url.normalize
+      end
+      url.request_uri
+    end
+    
+    def params_to_strip
+      @params_to_strip ||= Array(@options[:strip_params]).map { |p| p.to_s }
     end
     
     def cache_on_complete(env)

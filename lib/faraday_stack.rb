@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'faraday'
 require 'forwardable'
+require 'faraday_stack/addressable_patch'
 
 module FaradayStack
   extend Faraday::AutoloadHelper
