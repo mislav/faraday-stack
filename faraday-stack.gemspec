@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name    = 'faraday-stack'
-  gem.version = '0.0.1'
+  gem.version = '0.1.0'
   gem.date    = Time.now.strftime('%Y-%m-%d')
 
   gem.add_dependency 'faraday', '~> 0.6'
