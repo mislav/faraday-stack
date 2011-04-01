@@ -37,6 +37,7 @@ module FaradayStack
     end
     
     def finalize_response(response, env)
+      response = env[:response] = response.dup if response.frozen?
       response.apply_request env unless response.env[:method]
       response
     end
