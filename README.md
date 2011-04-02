@@ -38,7 +38,9 @@ Awesome example:
 * raises exceptions on 4xx, 5xx responses
 * follows redirects
 
-Optional features:
+To see how the default stack is built, see "[faraday_stack.rb][source]".
+
+### Optional features:
 
 * encode POST/PUT bodies as JSON:
       
@@ -55,7 +57,14 @@ Optional features:
             :namespace => 'faraday', :expires_in => 3600
         end
 
-To see how the default stack is built, see "[faraday_stack.rb][source]".
+* mount [Rack::Cache][] through `RackCompatible` middleware for HTTP caching of responses
+      
+        conn.builder.insert_after FaradayStack::FollowRedirects, FaradayStack::RackCompatible,
+          Rack::Cache::Context,
+            :metastore   => "file:/var/cache/rack/meta",
+            :entitystore => "file:/var/cache/rack/body"
+
 
 [faraday]: https://github.com/technoweenie/faraday
 [source]: https://github.com/mislav/faraday-stack/blob/master/lib/faraday_stack.rb
+[rack::cache]: http://rtomayko.github.com/rack-cache/
