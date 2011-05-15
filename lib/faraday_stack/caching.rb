@@ -24,14 +24,11 @@ module FaradayStack
     end
     
     def cache_key(env)
-      url = env[:url]
-      if params_to_strip.any?
-        url = url.dup
+      url = env[:url].dup
+      if url.query && params_to_strip.any?
         url.query_values = url.query_values.reject { |k,| params_to_strip.include? k }
-        url.normalize!
-      else
-        url = url.normalize
       end
+      url.normalize!
       url.request_uri
     end
     
