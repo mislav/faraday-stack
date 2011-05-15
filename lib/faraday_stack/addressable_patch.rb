@@ -5,16 +5,15 @@ unless Addressable::URI.parse('/?a=1&b=2') === '/?b=2&a=1'
   # fix `normalized_query` by sorting query key-value pairs
   # (rejected: https://github.com/sporkmonger/addressable/issues/28)
   class Addressable::URI
-    class << self
-      alias normalize_component_without_query_fix normalize_component
+    alias normalized_query_without_ordering_fix normalized_query
     
-      def normalize_component(component, character_class = CharacterClasses::RESERVED + CharacterClasses::UNRESERVED)
-        normalized = normalize_component_without_query_fix(component, character_class)
-        if character_class == Addressable::URI::CharacterClasses::QUERY
-          pairs = normalized.split('&').sort_by { |pair| pair[0, pair.index('=') || pair.length] }
-          normalized = pairs.join('&')
-        end
-        normalized
+    def normalized_query
+      fresh = @normalized_query.nil?
+      query = normalized_query_without_ordering_fix
+      if query && fresh
+        @normalized_query = query.split('&', -1).sort_by {|q| q[0..(q.index('=')||-1)] }.join('&')
+      else
+        query
       end
     end
   end
