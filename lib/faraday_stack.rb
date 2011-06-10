@@ -34,7 +34,7 @@ module FaradayStack
       yield builder if block_given?
       builder.use ResponseXML,  :content_type => /[+\/]xml$/
       builder.use ResponseHTML, :content_type => 'text/html'
-      builder.use ResponseJSON, :content_type => 'application/json'
+      builder.use ResponseJSON, :content_type => /(application|text)\/json/
       builder.use FollowRedirects
       builder.response :raise_error
       builder.adapter Faraday.default_adapter
