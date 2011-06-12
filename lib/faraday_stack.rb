@@ -28,7 +28,15 @@ module FaradayStack
   end
   
   def self.build(url = nil, options = {})
-    Faraday::Connection.new(url, options) do |builder|
+    klass = nil
+    if    url.is_a?(Hash)   then options = url.dup
+    elsif url.is_a?(Class)  then klass = url
+    else  options = options.merge(:url => url)
+    end
+
+    klass ||= options.delete(:class) || Faraday::Connection
+
+    klass.new(options) do |builder|
       builder.request :url_encoded
       builder.request :json
       yield builder if block_given?
