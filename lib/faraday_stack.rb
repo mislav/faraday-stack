@@ -35,6 +35,7 @@ module FaradayStack
       builder.use ResponseXML,  :content_type => /[+\/]xml$/
       builder.use ResponseHTML, :content_type => 'text/html'
       builder.use ResponseJSON, :content_type => /(application|text)\/json/
+      builder.use ResponseJSON::MimeTypeFix, :content_type => /text\/(plain|javascript)/
       builder.use FollowRedirects
       builder.response :raise_error
       builder.adapter Faraday.default_adapter

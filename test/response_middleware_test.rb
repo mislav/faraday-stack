@@ -7,6 +7,8 @@ class ResponseMiddlewareTest < Test::Unit::TestCase
       b.use @json_handler
       b.adapter :test do |stub|
         stub.get('json')      { [200, {'Content-Type' => 'application/json; charset=utf-8'}, "[1,2,3]"] }
+        stub.get('bad_mime')  { [200, {'Content-Type' => 'text/javascript; charset=utf-8'}, "[1,2,3]"] }
+        stub.get('js')        { [200, {'Content-Type' => 'text/javascript'}, "alert('hello')"] }
         stub.get('blank')     { [200, {'Content-Type' => 'application/json'}, ''] }
         stub.get('nil')       { [200, {'Content-Type' => 'application/json'}, nil] }
         stub.get('bad_json')  { [200, {'Content-Type' => 'application/json'}, '<body></body>']}
@@ -17,6 +19,10 @@ class ResponseMiddlewareTest < Test::Unit::TestCase
 
   def process_only(*types)
     @conn.builder.swap @json_handler, @json_handler, :content_type => types
+  end
+
+  def with_mime_type_fix(*types)
+    @conn.builder.insert_after @json_handler, FaradayStack::ResponseJSON::MimeTypeFix, :content_type => types
   end
 
   def test_uses_json_to_parse_json_content
@@ -68,5 +74,20 @@ class ResponseMiddlewareTest < Test::Unit::TestCase
     response = @conn.get('non_json')
     assert_equal 'text/html', response.headers['Content-Type']
     assert_equal '<body></body>', response.body
+  end
+  
+  def test_mime_type_fix
+    process_only('application/json')
+    with_mime_type_fix
+    response = @conn.get('bad_mime')
+    assert_equal 'application/json; charset=utf-8', response.headers['Content-Type']
+    assert_equal [1,2,3], response.body
+  end
+  
+  def test_mime_type_fix_conditional
+    process_only('application/json')
+    with_mime_type_fix
+    response = @conn.get('js')
+    assert_equal 'text/javascript', response.headers['Content-Type']
   end
 end

@@ -28,5 +28,23 @@ module FaradayStack
         end
       end
     end
+
+    # writes the correct MIME-type if the payload looks like JSON
+    class MimeTypeFix < ResponseMiddleware
+      def on_complete(env)
+        if process_response_type?(response_type(env)) and looks_like_json?(env)
+          old_type = env[:response_headers][CONTENT_TYPE]
+          new_type = 'application/json'
+          new_type << ';' << old_type.split(';', 2).last if old_type.index(';')
+          env[:response_headers][CONTENT_TYPE] = new_type
+        end
+      end
+
+      BRACKETS = %w- [ { -
+
+      def looks_like_json?(env)
+        parse_response?(env) and BRACKETS.include? env[:body][0,1]
+      end
+    end
   end
 end
