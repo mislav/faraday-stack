@@ -4,6 +4,7 @@ source "http://rubygems.org"
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
+  gem 'rake'
   gem 'nokogiri', :platforms => :ruby
   # ActiveSupport::JSON will be used in ruby 1.8 and Yajl in 1.9; this is to test against both adapters
   gem 'activesupport', '~> 2.3.8', :require => nil, :platforms => [:ruby_18, :jruby]
