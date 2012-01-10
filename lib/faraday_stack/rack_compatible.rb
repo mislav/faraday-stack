@@ -52,7 +52,7 @@ module FaradayStack
       env.each do |name, value|
         next unless String === name
         if NonPrefixedHeaders.include? name or name.index('HTTP_') == 0
-          name = name.sub(/^HTTP_/).downcase.tr('_', '-')
+          name = name.sub(/^HTTP_/, '').downcase.tr('_', '-')
           headers[name] = value
         end
       end

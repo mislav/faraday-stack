@@ -104,8 +104,8 @@ class HttpCachingTest < Test::Unit::TestCase
   def_delegators :@conn, :get, :post
   
   def test_cache_get
-    assert_equal 'request:1', get('/').body
-    response = get('/')
+    assert_equal 'request:1', get('/', :user_agent => 'test').body
+    response = get('/', :user_agent => 'test')
     assert_equal 'request:1', response.body
     assert_equal 'text/plain', response['content-type']
     
