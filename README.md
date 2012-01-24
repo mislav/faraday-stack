@@ -1,5 +1,9 @@
 # Über Stack
 
+**Notice: faraday-stack has been deprecated and its middleware moved to [faraday_middleware](https://github.com/pengwynn/faraday_middleware#readme).**
+
+---
+
 [Faraday][] is an HTTP client lib that provides a common interface over many adapters (such as Net::HTTP) and embraces the concept of Rack middleware when processing the request/response cycle.
 
 *“Faraday Stack”* is an add-on library that implements several middleware (such as JSON and XML parsers) and helps you build an awesome stack that covers most of your API-consuming needs.
